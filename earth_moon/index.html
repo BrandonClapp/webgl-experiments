@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Earth-Moon</title>
+    <link rel="stylesheet" href="earth_moon.css">
+</head>
+<body>
+    <!-- loading screen -->
+    <div id="loading_screen">
+        <span>
+            <h3>Earth - Moon</h3>
+            <h4>Loading assets and building scene...<h4>
+            <h5>Written by Glenn De Backer</h5>
+        </span>
+    </div>
+    
+    <!-- information -->
+    <div id="information">
+        <p class="planet"></p>
+        <p class="diameter"></p>
+        <p class="mass"></p>
+    </div>
+    
+    <!-- logo -->
+    <div id="logo">
+        <a href="http://www.simplicity.be"><img src="logo.png"></a>
+    </div>
+    
+</body>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/three.min.js"></script>
+
+<script>
+    
+    // global namespace so I don't polute
+    var earth_moon_ns = {};
+    earth_moon_ns.assetCount = 0;
+    
+    /**
+     * Show information
+     **/
+    var showInformation = function(objectName) {
+        
+        $('body').addClass('hand');
+        
+        if ( objectName === 'earth' ) {
+            $('#information').addClass('visible');
+            $('#information').find('.planet').html('Earth');
+            $('#information').find('.diameter').html('Diameter : 12,756.32km');
+            $('#information').find('.mass').html('Mass : 5.972E24kg');
+ 
+        } else if ( objectName === 'moon' ) {
+            $('#information').addClass('visible');
+            $('#information').find('.planet').html('Moon');    
+            $('#information').find('.diameter').html('Diameter : 12742km');
+            $('#information').find('.mass').html('Mass : 7.35e22 kg');            
+        }
+    };
+    
+    /**
+     * Hide information
+     **/
+    var hideInformation = function() {
+        $('body').removeClass('hand');
+        $('#information').removeClass('visible');
+    };
+    
+    /**
+     * Initializes system
+     **/
+    var initSystem = function() {
+        
+        // needed for picking 
+        earth_moon_ns.projector = new THREE.Projector();
+        earth_moon_ns.mouseVector = new THREE.Vector3();
+        earth_moon_ns.currentSelection = null;
+                
+        // setup scenes
+        earth_moon_ns.scene     = new THREE.Scene();
+        
+        // setup renderer
+        earth_moon_ns.renderer = new THREE.WebGLRenderer({ alpha: true });
+        earth_moon_ns.renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( earth_moon_ns.renderer.domElement );
+
+        // setup camera 
+        earth_moon_ns.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1200 );
+        earth_moon_ns.camera.position.z = 500;
+
+    };
+    
+    /**
+     * Loads assets
+     **/
+    var loadAssets = function(finishedCallback) {
+        
+        // load earth textures
+        earth_moon_ns.earthTexture     = THREE.ImageUtils.loadTexture( 'textures/earthmap1k.jpg', new THREE.UVMapping(), function() { 
+            increaseAssetsCounter(finishedCallback);
+        });
+        
+        earth_moon_ns.earthSpecTexture = THREE.ImageUtils.loadTexture( 'textures/earthspec1k.jpg', new THREE.UVMapping(), function() { 
+            increaseAssetsCounter(finishedCallback);
+        });
+        
+        earth_moon_ns.earthBumpTexture = THREE.ImageUtils.loadTexture( 'textures/earthbump1k.jpg', new THREE.UVMapping(), function() { 
+            increaseAssetsCounter(finishedCallback);
+        });
+        
+        // load cloud texture
+        earth_moon_ns.cloudTexture     = THREE.ImageUtils.loadTexture( 'textures/clouds.png', new THREE.UVMapping(), function() { 
+            increaseAssetsCounter(finishedCallback);
+        });
+        
+        // load moon textures
+        earth_moon_ns.moonTexture      =  THREE.ImageUtils.loadTexture( 'textures/moonmap1k.jpg', new THREE.UVMapping(), function() { 
+            increaseAssetsCounter(finishedCallback);
+		});
+    
+        earth_moon_ns.moonBumpTexture  = THREE.ImageUtils.loadTexture( 'textures/moonbump1k.jpg', new THREE.UVMapping(), function() { 
+            increaseAssetsCounter(finishedCallback);
+        });   
+    };
+    
+    /**
+     * Increase asset counter
+     **/
+    var increaseAssetsCounter = function(finishedCallback) {
+         // increase asset counter
+         earth_moon_ns.assetCount++;
+         
+         // if everything is loaded 
+         if( earth_moon_ns.assetCount === 6) {
+             // execute finish callback
+             finishedCallback();
+         }
+    };
+    
+    
+    /**
+     * Setup Scene
+     **/
+    var setupScene = function() {
+                        
+        // add earth
+        var earthGeometry = new THREE.SphereGeometry( 100, 32, 32 );
+        var earthMaterial = new THREE.MeshPhongMaterial  ({    
+            map: earth_moon_ns.earthTexture,
+            specularMap : earth_moon_ns.earthSpecTexture,
+            shininess : 30,
+            bumpMap: earth_moon_ns.earthBumpTexture,
+			bumpScale : 3.0
+		});
+
+        earth_moon_ns.earthSphere   = new THREE.Mesh( earthGeometry, earthMaterial );
+        earth_moon_ns.earthSphere.rotation.y = 10;
+        earth_moon_ns.scene.add( earth_moon_ns.earthSphere );
+        
+        // add cloud
+        var cloudGeometry = new THREE.SphereGeometry( 102, 32, 32 );
+        var cloudMaterial = new THREE.MeshLambertMaterial ({ 
+            transparent: true,   
+			map: earth_moon_ns.cloudTexture
+		});
+        earth_moon_ns.cloudSphere   = new THREE.Mesh( cloudGeometry, cloudMaterial );
+        earth_moon_ns.scene.add( earth_moon_ns.cloudSphere );
+
+        
+        // add earth atmosphere
+        var earthAtmosphereGeometry   = new THREE.SphereGeometry( 102.5, 32, 32 );
+        var earthAtmosphereMaterial   = new THREE.MeshLambertMaterial({color: 0x85C2FF , transparent : true});
+        earthAtmosphereMaterial.opacity = 0.3;
+        earth_moon_ns.earthAtmosphere =  new THREE.Mesh( earthAtmosphereGeometry, earthAtmosphereMaterial );
+        // give it a name earth as the atmosphere is the first object that the ray will hit
+        earth_moon_ns.earthAtmosphere.name = "earth"; 
+        earth_moon_ns.scene.add( earth_moon_ns.earthAtmosphere ); 
+
+        // add moon
+        earth_moon_ns.moon_parent = new THREE.Object3D();
+        earth_moon_ns.scene.add( earth_moon_ns.moon_parent );
+        
+        var moonGeometry = new THREE.SphereGeometry( 20, 32, 32 );
+        var moonMaterial = new THREE.MeshPhongMaterial({    
+			map: earth_moon_ns.moonTexture,
+            bumpMap: earth_moon_ns.moonBumpTexture,
+			bumpScale : 0.2
+
+		});
+        earth_moon_ns.moonSphere   = new THREE.Mesh( moonGeometry, moonMaterial );
+        earth_moon_ns.moonSphere.name = "moon";
+        earth_moon_ns.moonSphere.rotation.y = -4;
+        earth_moon_ns.moonSphere.position.x = -250;
+        earth_moon_ns.moon_parent.add( earth_moon_ns.moonSphere );
+        earth_moon_ns.scene.add( earth_moon_ns.moon_parent );
+        
+        // add light to simulator sun
+        var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.5 );
+        directionalLight.position.set( -200, 0, 100 );
+        earth_moon_ns.scene.add( directionalLight );
+     
+    };
+    
+    
+    /**
+     * Render frame
+     **/
+    var render = function () {
+        requestAnimationFrame(render);
+        
+        earth_moon_ns.earthSphere.rotation.y += 0.001; // rotate earth
+        earth_moon_ns.cloudSphere.rotation.y += 0.0013;
+        earth_moon_ns.moon_parent.rotation.y += 0.002; // rotate moon around earth
+        earth_moon_ns.moonSphere -= 0.0002 // rotate moon counter slow
+        
+        // render
+        earth_moon_ns.renderer.render(earth_moon_ns.scene, earth_moon_ns.camera);
+    };
+
+    /**
+     * Setup mouse
+     **/
+    var setupMouse = function() {
+        
+        // add on mouse move event
+        window.addEventListener( 'mousemove', function(event) {
+            
+            // convert mouse coordinates to mouse vector
+            earth_moon_ns.mouseVector.x = 2 * (event.clientX / window.innerWidth) - 1;
+            earth_moon_ns.mouseVector.y = 1 - 2 * ( event.clientY / window.innerHeight );
+
+            // cast ray to find objects in its path
+            var raycaster = earth_moon_ns.projector.pickingRay( earth_moon_ns.mouseVector.clone(), earth_moon_ns.camera );
+
+            // look for objects that intersect (add true to also look into children)            
+            var intersects = raycaster.intersectObjects( earth_moon_ns.scene.children, true  );
+
+            // if intersecting object is found
+            if (intersects.length) {
+                  var target = intersects[0].object;
+                  
+                  if ( earth_moon_ns.currentSelection != target.name ) {
+                      
+                      earth_moon_ns.currentSelection = target.name;
+                      
+                      if ( earth_moon_ns.currentSelection === 'earth') {
+                          showInformation('earth');
+                      } else if (earth_moon_ns.currentSelection === 'moon' ) {
+                          showInformation('moon');
+                      }
+                  }
+                  
+            } else {
+                earth_moon_ns.currentSelection = null;
+                hideInformation();
+            }
+
+            
+        }, false);
+    };
+
+    
+    // main entry    
+    loadAssets(function() {
+        initSystem();
+        setupScene();
+        setupMouse();
+        render();
+        
+        $('#loading_screen').addClass('hide');
+    });
+    
+
+
+    
+    
+</script>
+</html>

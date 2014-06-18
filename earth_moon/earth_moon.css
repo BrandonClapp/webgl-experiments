@@ -1,0 +1,94 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    cursor: default;
+}
+
+body 
+{
+    background-image:url("bg.jpg");
+    background-size: 100vw 100vh;
+}
+
+body.hand {
+    cursor: pointer;
+}
+
+#loading_screen{
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    width:  100vw;
+    height: 100vh;
+    
+    background-color: black;
+    color: white;
+    
+    display: table;
+    text-align: center;
+    
+    opacity: 1.0;
+    
+    transition: opacity .60s ease-in-out;
+   -moz-transition: opacity .60s ease-in-out;
+   -webkit-transition: opacity .60s ease-in-out;
+
+    
+}
+
+#loading_screen span{
+    font-family: Arial;
+    font-size: 1.8em;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#loading_screen.hide
+{
+    opacity: 0.0;
+}
+
+
+#logo {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 10px;
+    left: 10px;
+}
+
+#logo img {
+    border: solid white 1px;
+}
+
+#information {
+    position: absolute;
+    opacity: 0.0;
+    bottom: 10px;
+    right: 10px;
+    border: solid 2px rgb(255, 255, 255);
+    background-color: rgba(14, 59, 111, 0.8);
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    
+    font-family: arial;
+    color: white;
+
+
+    transition: opacity .30s ease-in-out;
+   -moz-transition: opacity .30s ease-in-out;
+   -webkit-transition: opacity .30s ease-in-out;
+
+}
+
+#information.visible{
+    opacity: 1.0;
+}
+
+#information .planet {
+    font-weight: bold;
+}
+
