@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style>
+   html, body, div, canvas {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+    }
+</style>
+</head>
+<body>
+	<div id="rootDiv">
+  		<canvas id="renderCanvas"></canvas>
+	</div>
+</body>
+<script src="babylon.1.13-beta.js"></script>
+<script src="hand-1.3.8.js"></script>
+<script>
+	
+    // Get the canvas element from our HTML below
+    var canvas = document.getElementById("renderCanvas");
+    
+     var scene;
+    
+    // Load BABYLON 3D engine
+    var engine = new BABYLON.Engine(canvas, true);
+
+       BABYLON.SceneLoader.Load("", "classroom.babylon", engine, function (newScene) {
+            
+            scene = newScene;
+            
+            // Wait for textures and shaders to be ready
+            newScene.executeWhenReady(function () {
+                // Attach camera to canvas inputs
+                newScene.activeCamera.attachControl(canvas);
+ 
+                
+                console.log(newScene);
+                
+                var originCamera = newScene.activeCamera;
+                
+                // Once the scene is loaded, just register a render loop to render it
+                engine.runRenderLoop(function() {
+                    newScene.render();
+                });
+            });
+        }, function (progress) {
+            // To do: give progress feedback to user
+        });
+    
+  
+    
+    
+</script>
+</html>
