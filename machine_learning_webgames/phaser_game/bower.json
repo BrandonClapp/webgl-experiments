@@ -1,0 +1,22 @@
+{
+  "name": "phaser_game",
+  "authors": [
+    "Glenn De Backer <glenn@simplicity.be>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "phaser": "^2.5.0",
+    "pica": "^2.0.4",
+    "synaptic": "1.0.4"
+  }
+}

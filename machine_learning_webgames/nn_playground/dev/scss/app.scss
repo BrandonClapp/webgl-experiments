@@ -1,0 +1,75 @@
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+
+header{
+  img{
+    width: 60px;
+    display: inline-block;
+  }
+
+  h3{
+    display: inline-block;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#painter-container{
+  text-align: center;
+
+  /**
+   * Painter element
+   */
+  #painter{
+    border: solid black 1px;
+    background-color: black;
+
+    &::hover{
+      cursor: pointer
+    }
+  }
+}
+
+/**
+ * Buttons container
+ */
+.button-container{
+
+  #select-label{
+    display: inline-block;
+    width: 70px;
+  }
+
+  &.hide{
+    display: none;
+  }
+}
+
+/**
+ * output canvas
+ */
+#output-canvas{
+  display: none;
+}
+
+/**
+ * Tab panes
+ */
+.tab-pane{
+  padding: 20px;
+
+  #trainingChart{
+    margin-top: 10px;
+   background-image: url(background.png);
+   background-repeat: no-repeat;
+   background-position: center;
+  }
+}
+
+/**
+ * Export textarea
+ */
+.export-textarea{
+  margin-top: 20px;
+}

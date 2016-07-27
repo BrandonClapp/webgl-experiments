@@ -1,0 +1,17 @@
+html, body {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: #436177; }
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  width: 100%; }
+  #game-container canvas {
+    border: solid black 2px; }
+
+#output-canvas {
+  display: none; }

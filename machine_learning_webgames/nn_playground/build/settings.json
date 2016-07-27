@@ -1,0 +1,19 @@
+{
+  "neuralnetwork":{
+      "input" : 24,
+      "hidden" : 16
+  },
+  "labels":[
+    {
+      "value" : 0,
+      "label" : "O"
+    },
+    {
+      "value" : 1,
+      "label" : "X"
+    }
+  ],
+  "chart":{
+    "numberOfVisibleDataPoints": 25
+  }
+}

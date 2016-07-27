@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+
+  <div id="container">
+    <!-- render canvas -->
+    <canvas id="render-canvas"></canvas>
+
+    <!-- drawing canvas -->
+    <div id="drawing-canvas-container">
+      <!-- drawing canvas -->
+      <canvas id="drawing-canvas" width="200" height="200"></canvas>
+      <!-- button-container -->
+      <div id="button-container">
+        <!-- reset button -->
+        <img id="button-reset" src="assets/img/button_reset.png" >
+      </div>
+    </div>
+  </div>
+</body>
+<script src="thirdparty.js"></script>
+<script src="game.js"></script>
+<script>
+  // init game
+  var game = new Game();
+
+  // add event handler for button
+  document.getElementById('button-reset').addEventListener('click', function() {
+    game.reset();
+  }, false);
+</script>
+</html>

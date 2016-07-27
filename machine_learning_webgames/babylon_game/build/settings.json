@@ -1,0 +1,6 @@
+{
+  "neuralnetwork":{
+      "input" : 24,
+      "hidden" : 16
+  }
+}

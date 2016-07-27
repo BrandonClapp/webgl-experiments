@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NN-Trainer</title>
+  <link rel="stylesheet" href="app.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <img src="logo.png"> <h3>Symbol Recognizer (ANN playground)</h3>
+    </header>
+
+    <div class="row">
+      <div id="painter-container" class="col-md-4">
+        <canvas id="painter" width="250" height="250"></canvas>
+        <!-- training buttons -->
+        <div id="buttons-container-training" class="button-container">
+          <select  class="form-control" id="select-label"></select>
+          <button class="btn btn-add btn-warning"> Add</button>
+          <button class="btn btn-undo btn-warning">Undo</button>
+          <button class="btn btn-paint-clear btn-info">Clear</button>
+        </div>
+
+        <!-- clasify buttons -->
+        <div id="buttons-container-classify" class="button-container hide">
+          <button class="btn btn-predict btn-warning">Predict</button>
+          <button class="btn btn-paint-clear btn-info">Clear</button>
+        </div>
+
+        <!-- import buttons -->
+        <div id="buttons-container-import-export" class="button-container hide"></div>
+      </div>
+      <div class="col-md-8">
+        <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#training" aria-controls="home" role="tab" data-toggle="tab">Training</a></li>
+          <li role="presentation"><a href="#classify" aria-controls="classify" role="tab" data-toggle="tab">Classify</a></li>
+          <li role="presentation"><a href="#export" aria-controls="import" role="tab" data-toggle="tab">Import / Export</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- training -->
+          <div role="tabpanel" class="tab-pane active" id="training">
+
+            <!-- dataset -->
+            <div class="panel panel-default">
+              <div class="panel-heading">Statistics</div>
+              <div class="panel-body">
+                <h4>Error</h4>
+                <!-- training chart -->
+                <canvas id="trainingChart" width="400" height="200"></canvas>
+                <div id="training-output">&nbsp;</div>
+                Number of total items in dataset: <span id="dataset-total">0</span>
+              </div>
+            </div>
+
+            <!-- training panel -->
+            <div class="panel panel-default">
+              <div class="panel-heading">Neural network settings</div>
+              <div class="panel-body">
+                <!-- settings form -->
+                <form>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="inputNNRate">Learning rate</label>
+                        <input type="number" class="form-control" id="inputNNRate" placeholder="learning rate" value=".01" step=".01">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="inputNNIterations">Iterations</label>
+                        <input type="number" class="form-control" id="inputNNIterations" placeholder="number of iterations" value="50" step="1">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="inputNNError">Error</label>
+                        <input type="number" class="form-control" id="inputNNError" placeholder="minimum target errrov value" value=".01" step="0.01">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="inputNNLog">Log</label>
+                          <input type="number" class="form-control" id="inputNNLog" placeholder="log" value="1" step="1">
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <button type="button" class="btn btn-training-start btn-warning">Start training</button>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- classify -->
+          <div role="tabpanel" class="tab-pane" id="classify">
+            <canvas id="classifyChart" width="400" height="300"></canvas>
+          </div>
+
+          <!-- export -->
+          <div role="tabpanel" class="tab-pane" id="export">
+            <button class="btn btn-export-dataset btn-warning">Export dataset</button>
+            <button class="btn btn-export-neural-network btn-warning">Export neural network</button>
+            <label class="btn btn-default btn-file btn-info">
+                Import dataset <input id="file-import-dataset" type="file" style="display: none;">
+            </label>
+            <label class="btn btn-default btn-file btn-info">
+                Import neural network <input id="file-import-neural-network" type="file" style="display: none;">
+            </label>
+          </div>
+
+        </div>
+      </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="thirdparty.js"></script>
+<script src="app.js"></script>
+</html>

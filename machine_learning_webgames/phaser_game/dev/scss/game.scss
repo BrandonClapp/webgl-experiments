@@ -1,0 +1,23 @@
+html, body{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(67, 97, 119);
+}
+
+#game-container{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+
+  canvas{
+    border: solid black 2px;
+  }
+}
+
+#output-canvas{
+  display: none;
+}
